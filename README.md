@@ -1,4 +1,4 @@
-# restaurant_apriori_viz
+# Restaurant Apriori - visualization
 An interactive data visualization project with association rules mining algorithm
 The source code can be downloaded or cloned using git command from the repository.
 1.	R studio can be downloaded from the official link: https://www.rstudio.com/
