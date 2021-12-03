@@ -1,7 +1,7 @@
 #Author: Sharath Kumar Kademaru
 # Dataset source: https://www.kaggle.com/henslersoftware/19560-indian-takeaway-orders (Local Indian Restaurant Takeaway Orders - London, UK) 
 #Refined Data source: https://github.com/kademarsharath/restaurant_apriori_viz/blob/main/restaurant-1-orders.csv
-#Let's import all the libraries
+#Let's import all the required libraries
 
 library("readxl")
 library("openxlsx")
@@ -24,11 +24,7 @@ colnames(retail) <- tolower(colnames(retail))
 rm(df)
 
 
-#I'm subsetting the columns and mutating to make changes in columns like Description
-#df1 <- retail %>% select(invoice, description,city)%>%
-#  mutate(description = str_trim(description,side = "both")) %>% 
-#  mutate(invoiceno = factor(invoice), description = str_replace_all(description, "[']", replacement = "")) %>% 
-#  mutate(description = tolower(str_replace_all(description,pattern = "[ ]", replacement = "_")))
+#I'm sub-setting the columns and mutating to make changes in columns like Description
 
 head(retail)
 
@@ -68,7 +64,7 @@ trans_retail <- read.transactions("transaction_retail.csv", sep = ",",
 
 LIST(head(trans_retail, 4))  #print sample to verify
 
-#execute the rules
+#execute the rules using apriori
 rules <- apriori(trans_retail, parameter = list(supp = 0.06, conf = 0.2))
 subrules <- head(rules, n = 300, by = "lift")
 rm(df_rules)
@@ -109,6 +105,7 @@ else{
   
 }
 
+#Creating the recursive connection of rules with products
 nodes <- data.frame(name = unique(c(df_items$item, df_items$RHS, df_items$rules))) %>% 
   rowid_to_column("id") %>%  mutate( id = c(id +offset))%>% 
   mutate(group = ifelse(str_detect(name, "Rules"), "A", "B"), label = name, 
@@ -127,8 +124,10 @@ nodes <- data.frame(name = unique(c(df_items$item, df_items$RHS, df_items$rules)
          )
   )
 
+#assigning the city for each iteration
 nodes <- nodes %>%mutate(city = c(p))
 
+#Making the direction between nodes using edges
 edges <- data.frame(from = df_items$item, to = df_items$rules, width = df_items$lift*4) %>% 
   bind_rows(data.frame(from = df_rules$rules, 
                        to = df_rules$RHS ,width = df_rules$lift*4)) %>% 
@@ -136,9 +135,8 @@ edges <- data.frame(from = df_items$item, to = df_items$rules, width = df_items$
   rename(from = id) %>% 
   left_join(nodes, by = c(to = "name")) %>% 
   select(from,id, width) %>% rename(to = id)
-#%>% mutate(color = ifelse(to <= 33, "red", "lightgreen"))
 
-
+#For first iteration intialize the final node with the first one
 if (count > 0){
   final_nodes1 <- rbind(final_nodes, nodes)
   rm(final_nodes)
@@ -150,6 +148,7 @@ if (count > 0){
   #break
   
 }
+#append nodes for subsequent iteration of loop
 else{
   rm(final_nodes)
   final_nodes <- nodes
@@ -165,6 +164,8 @@ print("Here is the count:")
 print(count(final_nodes))
 offset <-count(final_nodes)$n
 }
+
+#This is the heart of the program. We are using the nodes and edges that we;ve develooped in the visnetwork
 visNetwork(nodes = final_nodes, edges = final_edges, height = "500px", width = "100%") %>% 
   visEdges(arrows = "to", selectionWidth = 1 , width = 200 ) %>% 
   visOptions(highlightNearest = T) %>% visInteraction(tooltipStyle = "position: fixed; visibility: hidden; padding: 5px; white-space: nowrap;
