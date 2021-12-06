@@ -16,7 +16,7 @@ Install.packages ("stringr")
 Install.packages ("tidyr")
 Install.packages ("tidyverse")
 Install.packages ("visNetwork")
-6.	Once these packages are installed, you can hit the run button after loading the R notebook file.
-7.	If you want to run the markup notebook, hit “Run All” button followed by the “knit” button.
+6.	Once these packages are installed,If you want to run the markup notebook, hit “Run All” button or the “knit” button.(https://github.com/kademarsharath/restaurant_apriori_viz/blob/main/Project_Dataviz_sharath.Rmd) 
+7.	For running just the notebook, you can hit the run button after loading the R notebook file.(https://github.com/kademarsharath/restaurant_apriori_viz/blob/main/ass_rules_with_city.R)
 8.	You will receive the HTML document as the output after knitting the file.
 ![image](https://user-images.githubusercontent.com/15868045/144537561-0a4283d3-24e2-4a74-8d68-7918fba429a2.png)
