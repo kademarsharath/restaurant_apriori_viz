@@ -15,7 +15,7 @@ library("tidyverse")
 library("visNetwork")
 
 # We need to read the transactions data in the Restuarant Shop
-retail <- read.csv("Desktop/restaurant-1-orders.csv")
+retail <- read.csv("https://raw.githubusercontent.com/kademarsharath/restaurant_apriori_viz/main/restaurant-1-orders.csv")
 colnames(retail) <- tolower(colnames(retail))
 
 

@@ -11,9 +11,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Association Rules and Dynamic visualization of the rules
 
-This is an step by step method of mining the association rules from transaction data. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents.The pure source code is available in .R file inside the repository <http://rmarkdown.rstudio.com>.
+This is an step by step method of mining the association rules from transaction data. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents.The pure source code is available in .R file inside the repository <https://github.com/kademarsharath/restaurant_apriori_viz/>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+
+Let us read the data and start the pre-processing.
 
 ```{r read ,results='hide', echo =FALSE, warning=FALSE, message=FALSE}
 #Author: Sharath Kumar Kademaru
@@ -33,7 +36,7 @@ library("tidyverse")
 library("visNetwork")
 
 # We need to read all the transactions data in the Restaurant Shop
-retail <- read.csv("~/Desktop/restaurant-1-orders.csv")
+retail <- read.csv("https://raw.githubusercontent.com/kademarsharath/restaurant_apriori_viz/main/restaurant-1-orders.csv")
 colnames(retail) <- tolower(colnames(retail))
 
 
@@ -56,7 +59,7 @@ my_list1 <- unique(retail$city)
 count <- 0
 offset <-0
 ```
-We are done with the reading of file. We will now run the apriori for each of the city
+We are done with the reading of file. We will now run the apriori for each of the city. we have set the threshold as support =0.06 and confidence = 0.2
 ```{r eval=FALSE}
 rules <- apriori(trans_retail, parameter = list(supp = 0.06, conf = 0.2))
 ```
